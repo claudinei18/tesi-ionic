@@ -9,15 +9,25 @@ import { TabsPage } from '../pages/tabs/tabs';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { ProjetosServiceProvider } from '../providers/projetos-service/projetos-service';
 import { HttpModule } from '@angular/http';
+
+import { ProjetosServiceProvider } from '../providers/projetos-service/projetos-service';
+import { TarefasServiceProvider } from '../providers/tarefas-service/tarefas-service';
+import { TarefasPage, Filtro } from '../pages/tarefas/tarefas'
+import { TarefaPage } from '../pages/tarefa/tarefa'
+import { AboutPage } from '../pages/about/about'
+
 
 @NgModule({
   declarations: [
     MyApp,
     ProjetosPage,
     ProjetoPage,
-    TabsPage
+    TarefasPage,
+    TarefaPage,
+    TabsPage,
+    Filtro,
+    AboutPage
   ],
   imports: [
     HttpModule,
@@ -29,13 +39,17 @@ import { HttpModule } from '@angular/http';
     MyApp,
     ProjetosPage,
     ProjetoPage,
-    TabsPage
+    TarefasPage,
+    TarefaPage,
+    TabsPage,
+    AboutPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ProjetosServiceProvider, HttpModule
+    ProjetosServiceProvider, HttpModule,
+    TarefasServiceProvider
   ]
 })
 export class AppModule {}

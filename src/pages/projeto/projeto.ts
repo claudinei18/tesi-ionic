@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { ProjetosServiceProvider } from '../../providers/projetos-service/projetos-service';
 
 /**
@@ -21,7 +21,8 @@ export class ProjetoPage {
   novo: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-              public projetosService: ProjetosServiceProvider) {
+              public projetosService: ProjetosServiceProvider,
+              public toastCtrl: ToastController) {
     this.codigo = navParams.get('codigo');
     this.novo = navParams.get('novo');
     let projetos = projetosService.getProjetos();
@@ -39,17 +40,29 @@ export class ProjetoPage {
 
   alterar(){
     this.projetosService.editProjeto(this.codigo, this.nome);
+    this.presentToast('Projeto ' + this.nome + ' alterado com sucesso!');
     this.navCtrl.pop();
   }
 
   excluir(){
     this.projetosService.deleteProjeto(this.codigo);
+    this.presentToast('Projeto ' + this.nome + ' excluído com sucesso!');
     this.navCtrl.pop();
   }
 
   incluir(){
     this.projetosService.incluirProjeto(this.nome);
+    this.presentToast('Projeto ' + this.nome + ' inserido com sucesso!');
     this.navCtrl.pop();
+  }
+
+  presentToast(message: string) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      position: 'top',
+      duration: 3000
+    });
+    toast.present();
   }
 
   ionViewDidLoad() {
