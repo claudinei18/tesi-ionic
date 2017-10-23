@@ -17,6 +17,7 @@ export class AboutPage {
   nome: string = 'Claudinei Gomes Mendes';
   matricula: number = 509424;
   sobre: string = 'Aplicação para criação de Projetos e vincular Tarefas a esses projetos!';
+  linkApp: string = 'https://github.com/claudinei18/tesi-ionic';
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
