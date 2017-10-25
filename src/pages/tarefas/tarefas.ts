@@ -18,17 +18,27 @@ import { TarefaPage } from '../tarefa/tarefa';
 })
 export class TarefasPage {
 
-tarefas: any[];
-projetos: any[];
+tarefas: any[] = [];
+projetos: any[] = [];
 filtroTarefas = {};
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public tarefasService: TarefasServiceProvider,
               public projetosService: ProjetosServiceProvider,
               public menuController: MenuController) {
-                
-        this.projetos = projetosService.getProjetos();
-        this.tarefas = tarefasService.getTarefas();
+  }
+
+  ionViewDidEnter() {
+    this.projetosService.getProjetos().then(dados =>
+    {
+      this.projetos = dados;
+    });
+
+    this.tarefasService.getTarefas().then(
+      dados => {
+        this.tarefas = dados;
+      }
+    );
   }
 
   nomeProjeto(c):string {

@@ -34,33 +34,37 @@ export class TarefaPage {
     public projetosService: ProjetosServiceProvider,
     public toastCtrl: ToastController) {
       
-this.projetos = projetosService.getProjetos();
-this.novo = navParams.get('novo');
-this.codigoTarefa = navParams.get('codigo');
-if(!this.novo) {
-  let tarefas = tarefasService.getTarefas();
-  for(let i = 0; i < tarefas.length; i++){
-    if(tarefas[i].codigo == this.codigoTarefa){
-      this.codigoProjeto = tarefas[i].projeto;
-      this.descricao = tarefas[i].descricao;
-      this.prioridade = tarefas[i].prioridade;
-      let d = tarefas[i].data;
-      this.data = d.getFullYear() + "-" + 
-      ("0" + (d.getMonth() + 1)).substr(-2,2) + "-"+
-      ("0" + d.getDate()).substr(-2,2);
-    }
-  }
-}else {
-  this.codigoProjeto = this.projetos[0].codigo;
-  this.descricao = '';
-  this.prioridade = 3;
-  let d = new Date();
-  this.data = d.getFullYear() + "-" + 
-  ("0" + (d.getMonth() + 1)).substr(-2,2) + "-"+
-  ("0" + d.getDate()).substr(-2,2);
+projetosService.getProjetos().then(dados => {
+  this.projetos = dados;
+  this.novo = navParams.get('novo');
+  this.codigoTarefa = navParams.get('codigo');
+  if(!this.novo) {
   
-}
-this.tarefas = tarefasService.getTarefas();
+    tarefasService.getTarefa(this.codigoTarefa).then(
+      tarefa => {
+        this.codigoProjeto = tarefa.projeto;
+        this.descricao = tarefa.descricao;
+        this.prioridade = tarefa.prioridade;
+        let d = tarefa.data;
+        this.data = d.getFullYear() + "-" + 
+        ("0" + (d.getMonth() + 1)).substr(-2,2) + "-"+
+        ("0" + d.getDate()).substr(-2,2);
+      }
+    );
+  
+  }else {
+    this.codigoProjeto = this.projetos[0].codigo;
+    this.descricao = '';
+    this.prioridade = 3;
+    let d = new Date();
+    this.data = d.getFullYear() + "-" + 
+    ("0" + (d.getMonth() + 1)).substr(-2,2) + "-"+
+    ("0" + d.getDate()).substr(-2,2);
+    
+  }
+});
+
+// this.tarefas = tarefasService.getTarefas().then;
 }
 
 alterar(){
@@ -68,15 +72,22 @@ alterar(){
   parseInt(this.data.toString().substr(0, 4)),
   parseInt(this.data.toString().substr(5, 2)) - 1,
   parseInt(this.data.toString().substr(8, 2)));
-  this.tarefasService.editarTarefa(this.codigoTarefa, this.codigoProjeto, this.descricao, d, this.prioridade );
-  this.presentToast('Tarefa ' + this.descricao + ' alterada com sucesso!');
-  this.navCtrl.pop();
+  this.tarefasService.editarTarefa(this.codigoTarefa, this.codigoProjeto, this.descricao, d, this.prioridade ).then(
+    dados => {
+      this.presentToast('Tarefa ' + this.descricao + ' alterada com sucesso!');
+      this.navCtrl.pop();
+    }
+  );
 }
 
 excluir(){
-  this.tarefasService.excluirTarefa(this.codigoTarefa);
-  this.presentToast('Tarefa ' + this.descricao + ' excluída com sucesso!');
-  this.navCtrl.pop();
+  this.tarefasService.excluirTarefa(this.codigoTarefa)
+  .then(
+    dados => {
+      this.presentToast('Tarefa ' + this.descricao + ' excluída com sucesso!');
+      this.navCtrl.pop();
+    }
+  );
 }
 
 incluir(){
@@ -84,9 +95,11 @@ incluir(){
     parseInt(this.data.toString().substr(0, 4)),
     parseInt(this.data.toString().substr(5, 2)) - 1,
     parseInt(this.data.toString().substr(8, 2)));
-    this.tarefasService.incluirTarefa(this.codigoProjeto, this.descricao, d, this.prioridade );
-    this.presentToast('Tarefa ' + this.descricao + ' inserida com sucesso!');
-  this.navCtrl.pop();
+    this.tarefasService.incluirTarefa(this.codigoProjeto, this.descricao, d, this.prioridade )
+    .then(dados => {
+      this.presentToast('Tarefa ' + this.descricao + ' inserida com sucesso!');
+      this.navCtrl.pop();
+    });
 }
 
 presentToast(message: string) {

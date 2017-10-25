@@ -23,7 +23,7 @@
         <ion-label color="primary">Projeto</ion-label>
         <ion-select [(ngModel)]="codigoProjeto">
           <ion-option *ngFor="let p of projetos" value="{{p.codigo}}">
-            {{p.nome}}
+            {{p.projeto}}
           </ion-option>
         </ion-select>
       </ion-item>

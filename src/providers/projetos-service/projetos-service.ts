@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
 
 /*
   Generated class for the ProjetosServiceProvider provider.
@@ -11,31 +12,95 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class ProjetosServiceProvider {
 
-  projetos = [
-    {codigo: 0, nome: 'Álgoritmos'},
-    {codigo: 1, nome: 'Pós-Graduação'},
-    {codigo: 2, nome: 'EAD'}
-  ];
+  url = 'http://kutova.com/dev/todolist/api.php';
+  projetos = [];
   ultimoCodigo = 3;
 
   constructor(public http: Http) {
     console.log('Hello ProjetosServiceProvider Provider');
   }
 
-  getProjetos() {
-    return this.projetos;
+  getProjetos() : Promise<any[]> {
+    
+        return new Promise ( resolve => {
+            this.http.get(this.url + '/projetos')
+            .toPromise()
+            .then(
+            response => {
+                let dados = response.json();
+                let projetos = [];
+                for(let i = 0; i < dados.length; i++){
+                  projetos.push(
+                    {
+                        codigo: parseInt(dados[i].codigo),
+                        projeto:dados[i].projeto
+                    })
+                }
+                resolve(projetos);
+                });
+        }
+    );
   }
 
-  editProjeto(codigo: number, nome: string){
-    this.projetos[codigo].nome = nome;
+  getProjeto(p:number) : Promise<any> {
+    
+        return new Promise ( resolve => {
+            this.http.get(this.url + '/projetos/' + p)
+            .toPromise()
+            .then(
+            response => {
+                let dados = response.json();
+                let projeto = {
+                        codigo: parseInt(dados.codigo),
+                        projeto:dados.projeto
+                    }
+                resolve(projeto);
+                });
+        }
+    );
   }
 
-  deleteProjeto(codigo: number){
-    this.projetos.splice(codigo, 1);
+  editProjeto(p: number, nome: string){
+    let headers = new Headers({'Content-Type': 'application/json'});
+    let projeto = {
+      projeto: nome
+    };
+
+    let body = JSON.stringify(projeto);
+
+    return new Promise( resolve => {
+      this.http.put(this.url + '/projetos/' + p, body, {headers: headers})
+      .toPromise()
+      .then(response => resolve(response.json()));
+    })
+
+  }
+
+  deleteProjeto(codigo: number): Promise<any> {
+    return new Promise (resolve => {
+      this.http.delete(this.url + '/projetos/' + codigo)
+      .toPromise()
+      .then(
+        resposta => {
+          resolve(resposta.json())
+        }
+      )
+    })
   }
 
   incluirProjeto(nome: string){
-    this.projetos.push({codigo: ++this.ultimoCodigo, nome: nome})
+    let headers = new Headers({'Content-Type': 'application/json'});
+    let projeto = {
+      projeto: nome
+    };
+
+    let body = JSON.stringify(projeto);
+
+    return new Promise( resolve => {
+      this.http.post(this.url + '/projetos', body, {headers: headers})
+      .toPromise()
+      .then(response => resolve(response.json()));
+    })
   }
 
 }

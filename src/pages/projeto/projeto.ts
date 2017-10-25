@@ -17,7 +17,7 @@ import { ProjetosServiceProvider } from '../../providers/projetos-service/projet
 export class ProjetoPage {
 
   codigo: number;
-  nome: string;
+  projeto: string;
   novo: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
@@ -25,34 +25,29 @@ export class ProjetoPage {
               public toastCtrl: ToastController) {
     this.codigo = navParams.get('codigo');
     this.novo = navParams.get('novo');
-    let projetos = projetosService.getProjetos();
-    if(!this.novo){
-      for(let i=0; i < projetos.length; i++){
-        if(i == this.codigo){
-          this.nome = projetos[i].nome;
-          break;
-        }
-        
+    projetosService.getProjeto(this.codigo).then(dado => {
+      if(!this.novo){
+        this.projeto = dado.projeto;
       }
-    }
+    });
 
   }
 
   alterar(){
-    this.projetosService.editProjeto(this.codigo, this.nome);
-    this.presentToast('Projeto ' + this.nome + ' alterado com sucesso!');
+    this.projetosService.editProjeto(this.codigo, this.projeto);
+    this.presentToast('Projeto ' + this.projeto + ' alterado com sucesso!');
     this.navCtrl.pop();
   }
 
   excluir(){
     this.projetosService.deleteProjeto(this.codigo);
-    this.presentToast('Projeto ' + this.nome + ' excluído com sucesso!');
+    this.presentToast('Projeto ' + this.projeto + ' excluído com sucesso!');
     this.navCtrl.pop();
   }
 
   incluir(){
-    this.projetosService.incluirProjeto(this.nome);
-    this.presentToast('Projeto ' + this.nome + ' inserido com sucesso!');
+    this.projetosService.incluirProjeto(this.projeto);
+    this.presentToast('Projeto ' + this.projeto + ' inserido com sucesso!');
     this.navCtrl.pop();
   }
 
