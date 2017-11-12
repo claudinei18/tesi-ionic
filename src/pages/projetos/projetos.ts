@@ -22,11 +22,7 @@ export class ProjetosPage {
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               public projetosService: ProjetosServiceProvider) {
-      this.projetosService.getProjetos().then(
-        dados => {
-          this.projetos = dados;
-        }
-      );
+      this.ionViewDidEnter();
   }
 
   ionViewDidEnter() {

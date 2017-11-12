@@ -16,7 +16,10 @@ import { TarefasServiceProvider } from '../providers/tarefas-service/tarefas-ser
 import { TarefasPage, Filtro } from '../pages/tarefas/tarefas'
 import { TarefaPage } from '../pages/tarefa/tarefa'
 import { AboutPage } from '../pages/about/about'
+import { CameraPage } from '../pages/camera/camera'
 
+import { Badge } from '@ionic-native/badge';
+import { Camera } from '@ionic-native/camera';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,8 @@ import { AboutPage } from '../pages/about/about'
     TarefaPage,
     TabsPage,
     Filtro,
-    AboutPage
+    AboutPage,
+    CameraPage
   ],
   imports: [
     HttpModule,
@@ -42,14 +46,16 @@ import { AboutPage } from '../pages/about/about'
     TarefasPage,
     TarefaPage,
     TabsPage,
-    AboutPage
+    AboutPage,
+    CameraPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
+    Camera,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ProjetosServiceProvider, HttpModule,
-    TarefasServiceProvider
+    TarefasServiceProvider, Badge
   ]
 })
 export class AppModule {}

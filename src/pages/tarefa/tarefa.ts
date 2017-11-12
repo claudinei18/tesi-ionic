@@ -45,10 +45,9 @@ projetosService.getProjetos().then(dados => {
         this.codigoProjeto = tarefa.projeto;
         this.descricao = tarefa.descricao;
         this.prioridade = tarefa.prioridade;
-        let d = tarefa.data;
-        this.data = d.getFullYear() + "-" + 
-        ("0" + (d.getMonth() + 1)).substr(-2,2) + "-"+
-        ("0" + d.getDate()).substr(-2,2);
+        this.data = tarefa.data.getFullYear() + "-" + 
+        ("0" + (tarefa.data.getMonth() + 1)).substr(-2,2) + "-"+
+        ("0" + tarefa.data.getDate()).substr(-2,2);
       }
     );
   

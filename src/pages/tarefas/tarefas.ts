@@ -4,6 +4,9 @@ import { TarefasServiceProvider } from '../../providers/tarefas-service/tarefas-
 import { ProjetosServiceProvider } from '../../providers/projetos-service/projetos-service';
 import { TarefaPage } from '../tarefa/tarefa';
 
+import { Badge } from '@ionic-native/badge';
+import { Platform } from 'ionic-angular';
+
 /**
  * Generated class for the TarefasPage page.
  *
@@ -25,7 +28,13 @@ filtroTarefas = {};
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public tarefasService: TarefasServiceProvider,
               public projetosService: ProjetosServiceProvider,
-              public menuController: MenuController) {
+              public menuController: MenuController,
+              public badge: Badge,
+              public platform: Platform) {
+                platform.ready().then(() => {
+                  badge.set(10);
+                });
+                this.ionViewDidEnter();
   }
 
   ionViewDidEnter() {
